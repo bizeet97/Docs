@@ -1,0 +1,160 @@
+
+
+
+STep1: Spin up a aws linux server.
+
+To install docker in a linux system go to get.docker.com and run two cmds
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+
+After installing docker, also get docker-compose and docker-machine installed in the same system by running individual curl cmds.
+
+
+
+For updating the git repo as the repo gets updated 
+cd udemy-docker-mastery
+git pull
+
+
+
+3.6.58.140
+
+cmd----> docker version
+to check and verify the cli can talk to engine
+
+cmd----> docker info
+this command config values to engine.
+
+
+To run a docker command you should write in a proper way i.e
+
+docker <command> <subcommand> ex--> old-- docker run
+				    new-- docker container run
+
+Image vs Container
+-------------------
+
+Image is the application we run where as conatiner is an instance of that image running as a process.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+commands
+
+docker container run --publish 80:80 nginx ---------> this command will search the image for nginx and publish it in a new container.
+
+docker container ls -----> will list the running container.
+docker container ls -a ----> will list the avilable container.
+
+docker container run ----> will only run the or starts a new container
+docker container start ---> will start an existing container.
+
+To specify a container name
+-----------------------------
+docker container run --publish 80:80 --name webhost nginx
+
+										docker run --name mongo -d mongo
+
+To list the logs of the container
+-----------------------------------
+
+docker conatiner logs <containername>
+
+cmd----> docker top <container name>
+To list the processes running inside the container
+
+cmd---> ps aux        (if it shows an error try updating the container by cmd--->apt-get update && apt-get install -y procps)
+shows all the running processes
+docker ps -a -----> list of all containers created 
+commands
+------------
+
+docker container top ------------->process list in one character
+docker container inspect ---------->  details of one container config
+docker container stats -------------> performance stats for all containers
+
+commands gettimg shell inside containers
+------------------------------------------
+docker container run -it ---------> start new container interactively
+docker container exec -t ----------> run additional command in existing container
+{-t ---> simualates a real terminal, like what SSH does, -i ----> keep session open to receive terminal input}
+
+ubuntu image already contains a bash			docker container run -it --name ubuntu ubuntu
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Alpine is same as ubuntu but it does not contain bash it contains sh.
+
+cmd---> docker container port <container name> ----> displays the port of the container
+
+docker conatiner inspect --format '{{ .NEtworkSettings.IPAddress }}' <container name> -----> this command shows the ip address of the conatiner running in formatting the ip address
+
+
+Docker networks : CLI management
+------------------------------------
+docker networl ls----> shows network								NOTE: cmd to install curl in ubuntu cmd-> apt-get update && apt-get install curl
+docker network inspect ----> inspect a network	
+docker network create --driver ----> create a network						      cmd to install in centos  cmd---> yum update curl
+docker network connect -------> attach a network to container
+docker network disconnect -----> detach a network from container
+
+creating a new container and connecting to the nginx cmd
+docker container run -d --name new_nginx --network my_app_net nginx
+
+nsloopup search.(Hint)
+
+Image tagging and pushing to Docker hub
+------------------------------------------
+docker image tag sourceimage[:tag] targetimage[:tag] example:---> docker image tag nginx bizeet/nginx:testing    (note this testing is a tag assigned to nginx-.)
+
+to push you image to docker hub login into it by login cmd
+
+cmd-> docker 
+
+cd dockerfile-sample-i
+docker image build -t customnginx .   -----------> this cmd will build a docker image in the given directory
+
+Building images
+---------------
+
+cd dockerfile-sample-2
+ll
+vim Dockerfile
+docker container run -p 80:80 --rm nginx
+docker image build -t nginx-with-html
+docker container run -p 80:80 --rm nginx-with-html (hit enter and go to chrome and type local host)
+
+---------------------------------------------------------------
+cd docker-assignment-1
+vim dockerfile     ------------------> poluate the docker file use FROM RUN WORKDIR EXPOSE CMD commands
+docker build -t testnode . (-t is the tag name )
+docker container run --rm -p 80:3000 testnode
+
+----------------------------------------------------------------------------------
+
+Prune commands to keep system clean
+-----------------------------------
+
+docker image prune ---> clean up dangling images
+docker system prune ---> will clean up everything
+docker image prune -a  --> will remove images which are not using
+docker system df ----->  see space usage
+
+
+docker image inspect mysql
+
+docker volume ls
+docker volume inspect
+For my sql ----> its need a env variable -e MYSQL_ALLOW_EMPTY_PASSWORD=True
+
+For more user friendly database name we use the -v flag and database name along with the path shown below:-
+ -----------------------------------------------------------------------------------------------------------
+ | docker container run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=True -v mysql-db:/var/lib/mysql  mysql  |
+ -----------------------------------------------------------------------------------------------------------
+
+$(pwd)
+
+to check logs of a container   docker container logs -f psql
+
+
+
+
