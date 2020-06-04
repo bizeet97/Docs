@@ -7,6 +7,9 @@ To install docker in a linux system go to get.docker.com and run two cmds
 
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
+install docker engine :-
+$ sudo apt-get update
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 After installing docker, also get docker-compose and docker-machine installed in the same system by running individual curl cmds.
 
